@@ -142,11 +142,13 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 ## Specify libraries to link a library or executable target agains
 add_executable(${PROJECT_NAME}_node src/vision_to_mavros.cpp)
+add_dependencies(${PROJECT_NAME}_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
 )
 
 add_executable(t265_fisheye_undistort_node src/t265_fisheye_undistort.cpp)
+add_dependencies(t265_fisheye_undistort_node ${catkin_EXPORTED_TARGETS})
 target_link_libraries(t265_fisheye_undistort_node
   ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
 )
