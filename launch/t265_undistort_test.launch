@@ -13,19 +13,16 @@
 
   <group ns="$(arg camera_name)"> <!-- NOTE: same group as in the realsense launch file -->
 
-    <!-- rectify fisheye images obtained from the Realsense T265 camera (realsense-ros) -->
-    <!-- TODO: implement an undistort node that works with just the fisheye1 (the only one that is actually used) -->
-    <node pkg="vision_to_mavros" name="t265_fisheye_undistort" type="t265_fisheye_undistort_node">
+    <!-- undistort fisheye images obtained from the Realsense T265 camera (realsense-ros) -->
+    <node pkg="vision_to_mavros" name="t265_fisheye_undistort" type="t265_single_undistort_node">
+<!--          launch-prefix="gdbserver localhost:4567">-->
       <param name="param_file_path" value="$(find vision_to_mavros)/cfg/t265.yaml"/>
 
       <!-- in -->
       <remap from="/camera/fisheye1/image_raw" to="fisheye1/image_raw"/>
-      <remap from="/camera/fisheye2/image_raw" to="fisheye2/image_raw"/>
       <!-- out -->
       <remap from="/camera/fisheye1/rect/camera_info" to="fisheye1/rect/camera_info"/>
-      <remap from="/camera/fisheye2/rect/camera_info" to="fisheye2/rect/camera_info"/>
       <remap from="/camera/fisheye1/rect/image" to="fisheye1/rect/image"/>
-      <remap from="/camera/fisheye2/rect/image" to="fisheye2/rect/image"/>
     </node>
 
     <!-- Aruco detection -->
@@ -37,6 +34,7 @@
       <param name="mask_file" type="string" value="$(find percro_drone_contest_perception)/config/aruco_mask_config.yaml"/>
       <param name="image_transport" type="string" value="raw"/>
 
+      <!-- in -->
       <remap from="/camera/camera_info" to="fisheye1/rect/camera_info"/>
       <remap from="/camera/image_raw" to="fisheye1/rect/image"/>
     </node>
