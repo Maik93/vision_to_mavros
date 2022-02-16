@@ -12,8 +12,8 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "vision_to_mavros");
 
-  ros::NodeHandle node;
-  
+  ros::NodeHandle node("~");
+
   //////////////////////////////////////////////////
   // Variables for precision navigation
   //////////////////////////////////////////////////
@@ -78,7 +78,7 @@ int main(int argc, char** argv)
       ROS_WARN("Using default gamma_world: %f", gamma_world);
     }
 
-    // The roll angle around camera's own axis to align with body frame 
+    // The roll angle around camera's own axis to align with body frame
     if(node.getParam("roll_cam", roll_cam))
     {
       ROS_INFO("Get roll_cam parameter: %f", roll_cam);
@@ -88,7 +88,7 @@ int main(int argc, char** argv)
       ROS_WARN("Using default roll_cam: %f", roll_cam);
     }
 
-    // The pitch angle around camera's own axis to align with body frame 
+    // The pitch angle around camera's own axis to align with body frame
     if(node.getParam("pitch_cam", pitch_cam))
     {
       ROS_INFO("Get pitch_cam parameter: %f", pitch_cam);
@@ -98,7 +98,7 @@ int main(int argc, char** argv)
       ROS_WARN("Using default pitch_cam: %f", pitch_cam);
     }
 
-    // The yaw angle around camera's own axis to align with body frame 
+    // The yaw angle around camera's own axis to align with body frame
     if(node.getParam("yaw_cam", yaw_cam))
     {
       ROS_INFO("Get yaw_cam parameter: %f", yaw_cam);
@@ -201,7 +201,7 @@ int main(int argc, char** argv)
         quat_cam_to_body_x = tf::createQuaternionFromRPY(roll_cam, 0, 0);
         quat_cam_to_body_y = tf::createQuaternionFromRPY(0, pitch_cam, 0);
         quat_cam_to_body_z = tf::createQuaternionFromRPY(0, 0, yaw_cam);
-        
+
         // 3) Rotate body frame 90 degree (align body x with world y at launch)
         quat_rot_z = tf::createQuaternionFromRPY(0, 0, -gamma_world);
 
@@ -236,7 +236,7 @@ int main(int argc, char** argv)
     }
 
     //////////////////////////////////////////////////
-    // Publish landing_target message if option is enabled and transform is available 
+    // Publish landing_target message if option is enabled and transform is available
     //////////////////////////////////////////////////
     if (enable_precland)
     {
