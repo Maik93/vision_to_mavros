@@ -14,7 +14,7 @@ class T265Undistorsion {
 
 public:
     T265Undistorsion(ros::NodeHandle nh, image_transport::ImageTransport it, const std::string &param_file_path) {
-        cv::Mat K, D;
+        cv::Mat K, K1, D;
         cv::Vec3d T;
         cv::Vec2i size_input, size_output;
         cv::Mat identity = cv::Mat::eye(3, 3, cv::DataType<double>::type);
@@ -26,10 +26,12 @@ public:
         param_file["input"] >> size_input;
         param_file["output"] >> size_output;
 
-        cv::Size output_img_size(size_output[0], size_output[1]);
+        cv::Size in_img_size(size_input[0], size_input[1]);
+        cv::Size out_img_size(size_output[0], size_output[1]);
 
-        cv::fisheye::initUndistortRectifyMap(K, D, identity, K,
-                                             output_img_size, CV_32FC1, map_x, map_y); // or CV_16SC2
+        K1 = cv::getOptimalNewCameraMatrix(K, D, in_img_size, 1., out_img_size);
+        cv::fisheye::initUndistortRectifyMap(K, D, identity, K1,
+                                             out_img_size, CV_32FC1, map_x, map_y); // or CV_16SC2
 
         // Copy the parameters for rectified images to the camera_info messages
         camera_info_out.width = size_output[0];
